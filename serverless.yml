@@ -1,0 +1,27 @@
+service: note-app
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-west-1
+
+functions:
+  addNote:
+    handler: handler.addNote
+    events:
+      - http:
+          method: post
+  deleteNote:
+    handler: handler.deleteNote
+    events:
+      - http:
+          path: /note/{noteId}
+          method: delete
+  getAllNotes:
+    handler: handler.getAllNotes
+    events:
+      - http:
+          path: /note
+          method: get
