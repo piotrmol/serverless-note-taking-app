@@ -6,6 +6,36 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: eu-west-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:PutItem
+        - dynamodb:DeleteItem
+      Resource:
+        Fn::GetAtt:
+          - NoteTable
+          - Arn
+
+resources:
+  Resources:
+    NoteTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: NoteTable
+        KeySchema:
+          - AttributeName: userEmail
+            KeyType: HASH
+          - AttributeName: noteDate
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: userEmail
+            AttributeType: S
+          - AttributeName: noteDate
+            AttributeType: N
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
 
 functions:
   addNote:
@@ -17,7 +47,7 @@ functions:
     handler: handler.deleteNote
     events:
       - http:
-          path: /note/{noteId}
+          path: /note/{noteDate}
           method: delete
   getAllNotes:
     handler: handler.getAllNotes
