@@ -43,6 +43,7 @@ functions:
     events:
       - http:
           method: post
+          path: /note
   deleteNote:
     handler: handler.deleteNote
     events:
