@@ -39,19 +39,19 @@ resources:
 
 functions:
   addNote:
-    handler: handler.addNote
+    handler: functions/addNote.handler
     events:
       - http:
           method: post
           path: /note
   deleteNote:
-    handler: handler.deleteNote
+    handler: functions/deleteNote.handler
     events:
       - http:
           path: /note/{noteDate}
           method: delete
   getAllNotes:
-    handler: handler.getAllNotes
+    handler: functions/getAllNotes.handler
     events:
       - http:
           path: /note
