@@ -5,11 +5,10 @@ const documentClient = new AWS.DynamoDB.DocumentClient();
 
 const middy = require("middy");
 const { errorHandler } = require("../utils/errorHandler");
+const { authorize } = require("../utils/tokenValidator");
 
-// We will extract email from the token, when we add authorization
-const userEmail = "test@email.com";
-
-module.exports.handler = middy(async (_event) => {
+module.exports.handler = middy(async (event) => {
+  const { username: userEmail } = event.user;
   const params = {
     TableName: "NoteTable",
     KeyConditionExpression: "userEmail = :userEmail",
@@ -34,4 +33,6 @@ module.exports.handler = middy(async (_event) => {
       }),
     };
   }
-}).use(errorHandler());
+})
+  .use(authorize())
+  .use(errorHandler());

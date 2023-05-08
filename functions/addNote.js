@@ -7,15 +7,14 @@ const middy = require("middy");
 const { bodyValidator } = require("../utils/validator");
 const Joi = require("joi");
 const { errorHandler } = require("../utils/errorHandler");
-
-// We will extract email from the token, when we add authorization
-const userEmail = "test@email.com";
+const { authorize } = require("../utils/tokenValidator");
 
 const noteSchema = Joi.object({
   noteText: Joi.string().required(),
 });
 
 module.exports.handler = middy(async (event) => {
+  const { username: userEmail } = event.user;
   const body = JSON.parse(event.body);
   const { noteText } = body;
 
@@ -38,5 +37,6 @@ module.exports.handler = middy(async (event) => {
     }),
   };
 })
+  .use(authorize())
   .use(bodyValidator(noteSchema))
   .use(errorHandler());
