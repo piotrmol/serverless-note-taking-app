@@ -56,3 +56,15 @@ functions:
       - http:
           path: /note
           method: get
+  registerUser:
+    handler: functions/register.handler
+    events:
+      - http:
+          method: post
+          path: /register
+  loginUser:
+    handler: functions/login.handler
+    events:
+      - http:
+          method: post
+          path: /login
